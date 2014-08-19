@@ -1,5 +1,3 @@
-package text;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,9 +16,9 @@ import org.docx4j.wml.Style;
 public class Generator {
 
     public static void main(String[] args) {
-        
         if (args.length==1 && (args[0].equals("-h") || args[0].equals("--help"))) {
             printHelp();
+            System.exit();
         } else if (args.length != 2) {
             System.out.println("Invalid arguments.");
             printHelp();
