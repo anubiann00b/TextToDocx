@@ -2,6 +2,7 @@ package text;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -16,9 +17,36 @@ import org.docx4j.wml.Style;
 
 public class Generator {
 
-    public static void main(String[] args) throws JAXBException, Docx4JException, IOException {
+    public static void main(String[] args) {
+        
+        if (args.length==1 && (args[0].equals("-h") || args[0].equals("--help"))) {
+            printHelp();
+        } else if (args.length != 2) {
+            System.out.println("Invalid arguments.");
+            printHelp();
+            System.exit(0);
+        }
+        
+        String fileIn = args[0];
+        String fileOut = args[1];
+        
         Generator g = new Generator();
-        g.generate("test.txt", "test.docx");
+        try {
+            g.generate(fileIn, fileOut);
+        } catch (JAXBException | Docx4JException e) {
+            throw new RuntimeException(e);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found " + fileIn);
+        } catch (IOException e) {
+            System.out.println("Failed to read file: " + e);
+        }
+    }
+
+    static void printHelp() {
+        System.out.println("Usage:");
+        System.out.println("    text2docx [input file] [output file]");
+        System.out.println("    text2docx --help");
+        System.out.println();
     }
     
     WordprocessingMLPackage wordDoc;
