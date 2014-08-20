@@ -18,7 +18,7 @@ public class Generator {
     public static void main(String[] args) {
         if (args.length==1 && (args[0].equals("-h") || args[0].equals("--help"))) {
             printHelp();
-            System.exit();
+            System.exit(0);
         } else if (args.length != 2) {
             System.out.println("Invalid arguments.");
             printHelp();
