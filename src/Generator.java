@@ -14,8 +14,10 @@ import org.docx4j.wml.Jc;
 import org.docx4j.wml.JcEnumeration;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.PPr;
+import org.docx4j.wml.PPrBase.Spacing;
 import org.docx4j.wml.RFonts;
 import org.docx4j.wml.RPr;
+import org.docx4j.wml.STLineSpacingRule;
 import org.docx4j.wml.Style;
 
 public class Generator {
@@ -100,6 +102,13 @@ public class Generator {
         Jc justification = factory.createJc();
         justification.setVal(JcEnumeration.BOTH);
         paragraphProperties.setJc(justification);
+        
+        Spacing sp = factory.createPPrBaseSpacing();
+        sp.setAfter(BigInteger.ZERO);
+        sp.setBefore(BigInteger.ZERO);
+        sp.setLine(BigInteger.valueOf(482));
+        sp.setLineRule(STLineSpacingRule.AUTO);
+        paragraphProperties.setSpacing(sp);
         
         style.setPPr(paragraphProperties);
         
