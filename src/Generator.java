@@ -78,7 +78,7 @@ public class Generator {
             mdp.addParagraphOfText(mla.teacher);
             mdp.addParagraphOfText(mla.classInfo);
             mdp.addParagraphOfText(mla.date);
-            mdp.addParagraphOfText(mla.title);
+            mdp.addStyledParagraphOfText("Emphasis", mla.title);
         }
         
         String line;
@@ -87,20 +87,33 @@ public class Generator {
         }
         
         mdp.getStyleDefinitionsPart().getJaxbElement().getStyle().stream().forEach((Style s) -> {
-            if (s.getStyleId().equals("Normal"))
-                setStyleMLA(s);
+            switch (s.getStyleId()) {
+                case "Normal":
+                    setStyleMLA(s, true);
+                    break;
+                case "Emphasis":
+                    setStyleMLA(s, false);
+                    break;
+            }
         });
+        
+        mdp.addStyledParagraphOfText("Emphasis", mla.title);
         
         wordDoc.save(new File(out));
         System.out.println("Saved " + out);
 
     }
     
-    void setStyleMLA(Style style) {
+    void setStyleMLA(Style style, boolean justify) {
         ObjectFactory factory = Context.getWmlObjectFactory();
         PPr paragraphProperties = factory.createPPr();
         Jc justification = factory.createJc();
-        justification.setVal(JcEnumeration.BOTH);
+        
+        if (justify)
+            justification.setVal(JcEnumeration.BOTH);
+        else
+            justification.setVal(JcEnumeration.CENTER);
+        
         paragraphProperties.setJc(justification);
         
         Spacing sp = factory.createPPrBaseSpacing();
@@ -114,7 +127,7 @@ public class Generator {
         
         RPr rpr = new RPr();
         changeFont(rpr, "Times New Roman");
-        changeFontSize(rpr, 12*2);
+        
         style.setRPr(rpr);
     }
     
